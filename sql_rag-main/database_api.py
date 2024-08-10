@@ -166,23 +166,26 @@ Natural language query: {natural_language_query}
     return response.choices[0].message.content.strip()
 def summarize_query_result(sql_query, query_result):
     prompt = f"""
-    Here is a question that a user asked, and the result was fetched from a database. Please frame a response for the user based on the query result. Try to be as concise as possible without missing any information from the query result.
-    
-    Question asked by user: {sql_query}
+    Summarize the following SQL query result for an end user. Provide a clear, concise explanation of the data without technical jargon. Focus on the key insights and important information revealed by the query.
 
-    Query result:
+    SQL Query: {sql_query}
+
+    Query Result:
     {query_result.to_string()}
 
-    Please do not print anything except the Framed Response.
-    
-    Framed Response:
+    Your summary should:
+    1. Highlight the main findings or insights from the data
+    2. Be easy for a non-technical user to understand
+    3. Be concise but include all relevant information
+
+    Summary:
     """
     
     response = client.chat.completions.create(
         messages=[
             {
                 "role": "system",
-                "content": "You are an AI assistant that summarizes SQL query results in a human-friendly manner."
+                "content": "You are an AI assistant that summarizes SQL query results in a clear, non-technical manner for end users."
             },
             {
                 "role": "user",
