@@ -1,0 +1,61 @@
+.App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .main-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .chat-wrapper {
+    background-color: #ddd9d9;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .history-container {
+    max-height: 60vh; 
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  .history-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .history-container::-webkit-scrollbar-thumb {
+    background-color: #1976d2;
+    border-radius: 4px;
+  }
+  
+  .error-message {
+    text-align: center;
+    color: #f44336; 
+    margin-top: 20px;
+  }
+
+  .title-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.main-title {
+  font-weight: 700;
+  color: #2c3e50;
+  letter-spacing: 1px;
+}
+
+.highlight {
+  color: #3498db;
+}
+
+.underline {
+  height: 3px;
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  width: 700px;
+  margin-top: 1rem;
+}
