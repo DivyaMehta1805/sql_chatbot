@@ -5,7 +5,7 @@ A database chatbot, utilizing:
    - **Vector Embeddings** for tag generation based on similarity, via `Sentence Transformers`
    - **SpaCy** for query preprocessing & parsing semantic structure 
 
-![image](https://github.com/user-attachments/assets/fed9d280-b2a1-4dc5-b933-a9163448fc17)
+![image](sql_rag-main/Architecture Diagram.png)
 
 # Instructions to Run
 1. Python API (tested with Python3.11)
