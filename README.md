@@ -10,13 +10,13 @@ A database chatbot, utilizing:
 
 # API & Preprocessing Rationale
 ## Preprocessing: Challenges & Solutions
-1. **Introduced a similar terms column**
+1. **Introduced a similar terms column in events and Companies schema**
    - **Challenge**: Company industry (and similarly relevant industries for an event) are bad candidates for exact matching. e.g. `oil & gas` industry and `petroleum` industry are related 
    - **Solution**: Created Exhaustive *Vector Embeddings* for each unique company industry derived from the `company_industries` column. For each event/company description, ran a *similarity search* using an embedding model `all-MiniLM-L6-v2`, and created tags for each event/each company. 
 
 2. **Handling Employee Ranges**:
    - **Challenge**: Irregular Formatting for Employees column (e.g. `50-200`)
-   - **Solution**: Store upper & lower limits of employee count instead.
+   - **Solution**: Store upper & lower limits of employee count instead and deleted the previous column.
 
 3. **Email Address Generation**:
    - **Challenge**: Irregular email formatting, e.g. `[first][last]` and `[firstinitial][last]`, etc.
@@ -34,6 +34,7 @@ A database chatbot, utilizing:
    - LLM has confusion dealing with such cases. SpaCy helps provide the relevant context:
       - Is a particular adjective for Events or for Companies?, e.g. `Sales Events` and `Finance Companies`
       - When both events and companies are involved, whether to take a union or an intersection?
+      - This context is then used by the llm to make the right decision.
 
 2. **Search Similar Chunks**: Uses tags column in databases to search for similar terms as well when the search involves a particular industry. 
      
@@ -93,7 +94,7 @@ A database chatbot, utilizing:
 ## Key Challenges
 
 1. **Data Retrieval Challenges**:
-   - **Outdated Data Issue**: Implemented mechanisms to handle outdated data and show loading states.
+   - **Outdated Data Issue**: Implemented mechanisms to handle outdated data and show loading states. In the beginning since backend took time to refresh the data for the previous query was retrieved and displayed. Used useState for currentAns and multiple retries to avoid this and load the new Query Data only.
 
 2. **Design Challenges**:
    - **User Experience**: Making the ui user friendly posed some challenges.
@@ -127,8 +128,8 @@ A database chatbot, utilizing:
 ## Challenges
 
 1. **Handling Diverse Data Formats**:
-   - **Inconsistent Revenue Figures**: Standardized revenue data to avoid confusion.
-   - **Employee Range Confusion**: Split ranges into lower and upper bounds.
+   - **Inconsistent Revenue Figures**: Standardized revenue data (in millions) to avoid confusion.
+   - **Employee Range Confusion**: Split ranges into lower and upper bounds so as to avoid irrelevant results.
 
 2. **Generating and Managing Email Addresses**:
    - Programmatically created email addresses ensuring proper formatting.
