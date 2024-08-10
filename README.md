@@ -19,6 +19,11 @@ A database chatbot, utilizing:
     - Install node modules `npm i`
     - Start the frontend: `npm start`
 
+You should be able to run it as below:
+
+# Video Demo
+
+
 # API & Preprocessing Rationale
 ## Preprocessing: Challenges & Solutions
 1. **Introduced a similar terms column in events and Companies schema**
