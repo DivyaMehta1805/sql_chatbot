@@ -7,6 +7,17 @@ A database chatbot, utilizing:
 
 ![image](https://github.com/user-attachments/assets/fed9d280-b2a1-4dc5-b933-a9163448fc17)
 
+# Instructions to Run
+1. Python API (tested with Python3.11)
+    - (Optional) Create a virtual environment
+    - Install requirements by `pip install -r requirements.txt`
+    - Start the server by running `python python_apisetup.py`
+    - Please make sure that `GROQ_API_KEY` environment variable is set. If not, please obtain a free API key from Groq.
+
+2. Frontend:
+    - Go to frontend `cd frontend` 
+    - Install node modules `npm i`
+    - Start the frontend: `npm start`
 
 # API & Preprocessing Rationale
 ## Preprocessing: Challenges & Solutions
