@@ -22,7 +22,7 @@ A database chatbot, utilizing:
 You should be able to run it as below:
 
 # Video Demo
-![Video Demonstration] (https://github.com/DivyaMehta1805/sql_chatbot/raw/main/sql_rag-main/nl2sql.mp4)
+![Video Demonstration](https://github.com/DivyaMehta1805/sql_chatbot/raw/main/sql_rag-main/nl2sql.mp4)
 
 # API & Preprocessing Rationale
 ## Preprocessing: Challenges & Solutions
