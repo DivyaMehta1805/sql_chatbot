@@ -62,6 +62,25 @@ const GlowingButton = styled(Button)({
   },
 });
 
+const formatBotReply = (reply) => {
+  if (typeof reply === 'string') {
+    return reply.split('\n').map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+  } else if (Array.isArray(reply)) {
+    return (
+      <pre>
+        {JSON.stringify(reply, null, 2)}
+      </pre>
+    );
+  } else {
+    return JSON.stringify(reply, null, 2);
+  }
+};
+
 function App() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -124,8 +143,14 @@ function App() {
         const data = await response.json();
         console.log("data", data);
     
+        // if (data.response !== currentAns) {
+        //   newAnswer = data.response.replace(/\\n/g, '\n');
+        //   break;
+        // }
+
         if (data.response !== currentAns) {
           newAnswer = data.response.replace(/\\n/g, '\n');
+          console.log("Processed answer:", newAnswer);  
           break;
         }
     
@@ -202,7 +227,7 @@ SQL Based <span className="highlight">Chatbot</span>
                     }}
                   >
                     <Typography variant="body2" sx={{ fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
-                      {JSON.stringify(entry.botReply, null, 2)}
+                      {formatBotReply(entry.botReply)}
                     </Typography>
                   </Box>
                 </Box>
