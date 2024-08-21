@@ -32,11 +32,8 @@ def analyze_query(query):
     event_context = False
     company_context = False
    
-    # print(f"\nAnalyzing query: {query}")
     for token in doc:
-        # print(f"Token: {token.text}, Lemma: {token.lemma_}, POS: {token.pos_}, Dep: {token.dep_}")
-        # print(f"Children: {[f'{child.text} ({child.pos_})' for child in token.children]}")
-        
+ 
         if token.lemma_.lower() in event_indicators:
             modifiers = [child for child in token.children if child.pos_ in ['ADJ'] or child.dep_ in ['compound', 'amod']]
             if modifiers:
@@ -48,6 +45,22 @@ def analyze_query(query):
             if modifiers:
                 company_context = True
                 print(f"Company context set to True. '{token.text}' modified by: {[m.text for m in modifiers]}")
+
+
+    
+    if not event_context or not company_context:
+        for token in doc:
+            if token.pos_ == 'VERB':
+                related_noun, relation_type = find_related_noun(token, event_indicators, company_indicators)
+                if related_noun:
+                    qualifiers = find_qualifiers(token)
+                    if qualifiers:
+                        if related_noun == 'event' and not event_context:
+                            event_context = True
+                            print(f"Event context set to True. Verb '{token.text}' qualifies events with: {', '.join(qualifiers)}")
+                        elif related_noun == 'company' and not company_context:
+                            company_context = True
+                            print(f"Company context set to True. Verb '{token.text}' qualifies companies with: {', '.join(qualifiers)}")
 
     print(f"Final Event context: {event_context}")
     print(f"Final Company context: {company_context}")
@@ -61,24 +74,29 @@ def analyze_query(query):
     else:
         return 'unknown'
 
-# Test cases
-test_queries = [
-    "find all finance events",
-    "oil companies",
-    "oil companies and cybersec events",
-    "companies with more than 1000 employees",
-    "events in New York",
-    "tech startups",
-    "companies greater than 1000",
-]
-
-for query in test_queries:
-    result = analyze_query(query)
-    print(f"\nQuery: {query}")
-    print(f"Final result: {result}\n")
+def find_related_noun(token, event_indicators, company_indicators):
+    for ancestor in token.ancestors:
+        if any(indicator in ancestor.lemma_.lower() for indicator in event_indicators):
+            return 'event', 'descendant'
+        if any(indicator in ancestor.lemma_.lower() for indicator in company_indicators):
+            return 'company', 'descendant'
     
+    for child in token.subtree:
+        if child.dep_ in ['nsubj', 'dobj', 'pobj']:
+            if any(indicator in child.lemma_.lower() for indicator in event_indicators):
+                return 'event', 'ancestor'
+            if any(indicator in child.lemma_.lower() for indicator in company_indicators):
+                return 'company', 'ancestor'
     
+    return 'unknown', 'unknown'
 
+def find_qualifiers(token):
+    qualifiers = []
+    for child in token.subtree:
+        if child.dep_ in ['amod', 'pobj'] and child.pos_ in ['ADJ', 'NOUN']:
+            qualifiers.append(child.text)
+    return qualifiers
+        
 def generate_sql_query(natural_language_query):
     context = analyze_query(natural_language_query)
     
