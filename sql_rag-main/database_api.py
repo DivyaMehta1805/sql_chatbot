@@ -152,6 +152,11 @@ IMPORTANT: When searching for relevant information, prioritize using the 'simila
      OR LOWER(companies.similar_terms) LIKE '%keyword2%'
      OR LOWER(companies.similar_terms) LIKE '%related_term%'
 6. Only use direct column comparisons if there's no relevant match in the 'similar_terms' column.
+7.Wherever any people details are mentioned, search for them in the 'people' table.
+8. Verbs like most,participating and other action verbs are not right for searching in similar_terms, comprehend statement in such case. DO NOT do this in case other than verb. Search all nouns in similar_terms only. If noun is mentioned with explicit terms like name or description still search in similar_terms as long as it is a noun.
+9. Each table only has the columns described in the corresponding description. Company does not have access to event's columns without performing a join and vice-versa.
+10. When generating SQL query for different tables with same column names always specify the table name before referring to the column.
+11.Do not use INTERSECT when Joining different tables
 CONTEXT INSTRUCTIONS:
 The context of the query has been analyzed and determined to be: {context}
 - If the context is 'company', search only in the similar_terms column of the companies table.
@@ -159,7 +164,6 @@ The context of the query has been analyzed and determined to be: {context}
 - If the context is 'both', search in both tables and use INTERSECT to find common results in the similar_terms columns.
 - If the context is 'unknown', search in both tables and use UNION to combine results from the similar_terms columns.
 - If any context (event or company) is false, DO NOT SEARCH its corresponding similar_terms column.
-
 Natural language query: {natural_language_query}
 
     SQL query:
@@ -192,9 +196,9 @@ def summarize_query_result(sql_query, query_result):
     {query_result.to_string()}
 
     Your summary should:
-    1. Highlight the main findings or insights from the data
+    1. Highlight the main findings.
     2. Be easy for a non-technical user to understand
-    3. Be concise but include all relevant information
+    3. Be concise but include all relevant information, the relevant information is the result that has been output by the sql query. DO NOT give the insights not related to the data.
 
     Summary:
     """
@@ -232,8 +236,9 @@ def process(user_query):
         print("\nQuery result:")
         print(result)
         summarize=summarize_query_result(user_input,result)
-        print({summarize});
-        
+        clean_text(summarize)
+        print({summarize})
+
         return summarize
     except Exception as e:
             print(f"An error occurred: {str(e)}")
